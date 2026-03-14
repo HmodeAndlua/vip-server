@@ -3,6 +3,10 @@ const app = express();
 
 app.use(express.json());
 
+app.get("/", (req,res)=>{
+  res.send("VIP SERVER RUNNING");
+});
+
 let codes = {
   "VIP123": []
 };
@@ -29,6 +33,8 @@ app.post("/verify", (req, res) => {
   return res.json({status:"OK"});
 });
 
-app.listen(3000, ()=>{
-  console.log("Server started");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, "0.0.0.0", ()=>{
+  console.log("Server started on " + PORT);
 });
