@@ -3,7 +3,7 @@ const app = express();
 
 app.use(express.json());
 
-// للتأكد أن السيرفر يعمل
+// اختبار السيرفر
 app.get("/", (req, res) => {
   res.send("VIP SERVER RUNNING");
 });
@@ -13,34 +13,34 @@ let codes = {
   "VIP123": []
 };
 
-// التحقق من الكود
-app.post("/verify", (req, res) => {
+// تحقق GET (للتطبيق)
+app.get("/verify", (req, res) => {
 
-  console.log("VERIFY REQUEST:", req.body);
+  const code = req.query.code;
+  const device = req.query.device;
 
-  const code = req.body.code;
-  const device = req.body.device;
+  console.log("VERIFY REQUEST:", code, device);
 
   if(!codes[code]){
     console.log("INVALID CODE:", code);
-    return res.json({status:"INVALID"});
+    return res.send("INVALID");
   }
 
   if(codes[code].includes(device)){
-    console.log("ALREADY USED ON DEVICE:", device);
-    return res.json({status:"OK"});
+    console.log("ALREADY USED:", device);
+    return res.send("OK");
   }
 
   if(codes[code].length >= 1){
     console.log("DEVICE LIMIT:", device);
-    return res.json({status:"DEVICE_LIMIT"});
+    return res.send("DEVICE_LIMIT");
   }
 
   codes[code].push(device);
 
   console.log("ACTIVATED:", code, device);
 
-  return res.json({status:"OK"});
+  return res.send("OK");
 });
 
 const PORT = process.env.PORT || 3000;
